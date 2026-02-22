@@ -15,8 +15,8 @@ public class BrowserSetup {
             driver = new EdgeDriver();
         }
         else {
-            System.out.println("Browser not supported. Defaulting to Chrome...");
-            driver = new ChromeDriver();
+            System.out.println("Browser '" + browserChoice + "' not supported. Defaulting to Edge...");
+            driver = new EdgeDriver();
         }
         driver.manage().window().maximize();
         driver.get(url);
