@@ -1,71 +1,67 @@
 package Pages;
-import org.openqa.selenium.*;
-import org.openqa.selenium.support.ui.*;
+
+import Base.WebTestBase;
+import Utilities.BrowserSetup;
+import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
+import org.openqa.selenium.support.FindBy;
+import org.openqa.selenium.support.ui.ExpectedConditions;
+import org.openqa.selenium.support.ui.WebDriverWait;
+
 import java.time.Duration;
-/**
- * LoginActions - Page Object Model for Login Page
- * Contains all login-related actions and locators
- */
-public class LoginActions {
+
+
+public class LoginActions  {
+
     WebDriver driver;
     WebDriverWait wait;
-    WebDriverWait longWait;
-    // Locators (public for visibility)
-    public By loginButton = By.xpath("//button[contains(.,'Login')]");
-    public By emailField = By.id("login-email");
-    public By passwordField = By.id("login-password");
-    public By submitButton = By.id("login-submit");
-    public By welcomeHeader = By.xpath("//*[@id='app-main-content']/section/div/h2");
-    /**
-     * Constructor - Initializes WebDriver and WebDriverWait
-     */
-    public LoginActions(WebDriver driver) {
+
+    public void loginActions(WebDriver driver) {
         this.driver = driver;
-        this.wait = new WebDriverWait(driver, Duration.ofSeconds(10));
-        this.longWait = new WebDriverWait(driver, Duration.ofSeconds(20));
+        this.wait = new WebDriverWait(driver, Duration.ofSeconds(15));
+        BrowserSetup.initElements(driver, this);
     }
-    /**
-     * Click the Login button to open the login form
-     */
+
+    @FindBy(xpath = "//*[@id='app-root']/nav/div[1]/div[3]/button/span[2]")
+    WebElement loginButton;
+
+    @FindBy(id = "login-email")
+    WebElement loginEmailField;
+
+    @FindBy(id = "login-password")
+    WebElement loginPasswordField;
+
+    @FindBy(id = "login-submit")
+    WebElement loginSubmitButton;
+
+    @FindBy(xpath = "//p[contains(text(), \"Here's an overview of your learning journey\")]")
+    WebElement welcomeBackMessage;
+
     public void clickLoginButton() {
         wait.until(ExpectedConditions.elementToBeClickable(loginButton)).click();
-        System.out.println("[ACTION] Clicked Login Button");
     }
-    /**
-     * Enter email and password credentials
-     */
-    public void enterCredentials(String email, String password) {
-        driver.findElement(emailField).sendKeys(email);
-        System.out.println("[ACTION] Entered Email: " + email);
-        driver.findElement(passwordField).sendKeys(password);
-        System.out.println("[ACTION] Entered Password");
+
+    public void enterEmailAddress(String email) {
+        wait.until(ExpectedConditions.visibilityOf(loginEmailField));
+        loginEmailField.sendKeys(email);
     }
-    /**
-     * Click the Submit button to login
-     */
-    public void clickSubmit() {
-        driver.findElement(submitButton).click();
-        System.out.println("[ACTION] Clicked Submit Button");
+
+    public void enterPassword(String password) {
+        wait.until(ExpectedConditions.visibilityOf(loginPasswordField));
+        loginPasswordField.sendKeys(password);
     }
-    /**
-     * All-in-one login shortcut (click button -> enter credentials -> submit)
-     */
-    public void login(String email, String password) {
-        clickLoginButton();
-        enterCredentials(email, password);
-        clickSubmit();
+
+    public void clickSubmitButton() {
+        wait.until(ExpectedConditions.elementToBeClickable(loginSubmitButton)).click();
     }
-    /**
-     * Verify that login was successful by checking the welcome message
-     */
+
     public void verifyLoginSuccess(String expectedMessage) {
-        WebElement header = longWait.until(ExpectedConditions.visibilityOfElementLocated(welcomeHeader));
-        String actualMessage = header.getText();
-        System.out.println("[DEBUG] Expected: [" + expectedMessage + "]");
-        System.out.println("[DEBUG] Actual: [" + actualMessage + "]");
+        wait.until(ExpectedConditions.visibilityOf(welcomeBackMessage));
+        String actualMessage = welcomeBackMessage.getText();
         if (!actualMessage.equals(expectedMessage)) {
-            throw new AssertionError("FAILED: Expected [" + expectedMessage + "] but got [" + actualMessage + "]");
+            throw new AssertionError("Expected message: " + expectedMessage + ", but got: " + actualMessage);
         }
-        System.out.println("[VERIFY] Login successful! Message: " + actualMessage);
     }
 }
+
+

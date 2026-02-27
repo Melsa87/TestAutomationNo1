@@ -1,21 +1,31 @@
 package Base;
+
+import Pages.LoginActions;
 import Utilities.BrowserSetup;
 import org.openqa.selenium.WebDriver;
 import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
+
 public class WebTestBase {
-    protected WebDriver driver;
-    // Define your URL here for easy access
-    String testUrl = "https://ndosisimplifiedautomation.vercel.app";
-    @BeforeMethod(alwaysRun = true)
+
+    BrowserSetup browserSetup = new BrowserSetup();
+    public final String url = "https://ndosisimplifiedautomation.vercel.app/";
+    public final String browserChoice = "chrome";
+
+    public WebDriver driver;
+    public LoginActions loginActions;
+
+    @BeforeMethod
     public void setUp() {
-        // Now passing the variable 'testUrl' into the method
-        driver = BrowserSetup.startBrowser("chrome", testUrl);
+        driver = BrowserSetup.startBrowser(browserChoice, url);
+        // Initialising the helper with the driver
+        loginActions = new LoginActions();
     }
-    @AfterMethod(alwaysRun = true)
+
+    @AfterMethod
     public void tearDown() {
         if (driver != null) {
-            driver.quit();
+            browserSetup.closeBrowser(driver);
         }
     }
 }
