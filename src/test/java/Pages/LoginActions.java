@@ -1,28 +1,27 @@
 package Pages;
 
-import Base.WebTestBase;
-import Utilities.BrowserSetup;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
+import org.openqa.selenium.support.PageFactory;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
 import java.time.Duration;
 
 
-public class LoginActions  {
+public class LoginActions {
 
     WebDriver driver;
     WebDriverWait wait;
 
-    public void loginActions(WebDriver driver) {
+    public LoginActions(WebDriver driver) {
         this.driver = driver;
-        this.wait = new WebDriverWait(driver, Duration.ofSeconds(15));
-        BrowserSetup.initElements(driver, this);
+        this.wait = new WebDriverWait(driver, Duration.ofSeconds(50));
+        PageFactory.initElements(driver,this);
     }
 
-    @FindBy(xpath = "//*[@id='app-root']/nav/div[1]/div[3]/button/span[2]")
+    @FindBy(xpath = "//button[contains(., 'Login')]")
     WebElement loginButton;
 
     @FindBy(id = "login-email")
@@ -61,7 +60,6 @@ public class LoginActions  {
         if (!actualMessage.equals(expectedMessage)) {
             throw new AssertionError("Expected message: " + expectedMessage + ", but got: " + actualMessage);
         }
+
     }
 }
-
-

@@ -8,7 +8,6 @@ import org.testng.annotations.BeforeMethod;
 
 public class WebTestBase {
 
-    BrowserSetup browserSetup = new BrowserSetup();
     public final String url = "https://ndosisimplifiedautomation.vercel.app/";
     public final String browserChoice = "chrome";
 
@@ -19,13 +18,13 @@ public class WebTestBase {
     public void setUp() {
         driver = BrowserSetup.startBrowser(browserChoice, url);
         // Initialising the helper with the driver
-        loginActions = new LoginActions();
+        loginActions = new LoginActions(driver);
     }
 
     @AfterMethod
     public void tearDown() {
         if (driver != null) {
-            browserSetup.closeBrowser(driver);
+            BrowserSetup.closeBrowser(driver);
         }
     }
 }

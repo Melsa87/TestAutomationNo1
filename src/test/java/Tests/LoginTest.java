@@ -21,14 +21,13 @@ public class LoginTest extends WebTestBase {
 
         loginActions(email, password);
 
-        loginActions.verifyLoginSuccess("Welcome Back, Melsa! 👋");
+        loginActions.verifyLoginSuccess("Here's an overview of your learning journey");
     }
 
     @DataProvider(name = "loginData")
     public Object[][] getData() {
         return new Object[][]{
-                {"melsa@gmail.co.za", "Melsa@1234"}
+                {"melsa@gmail.co.za", "Pass@1234"}
         };
     }
 }
-
